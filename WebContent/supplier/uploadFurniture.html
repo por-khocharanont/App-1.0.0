@@ -1,0 +1,98 @@
+<html>
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.min.js"></script>
+</head>
+<body>
+	<style>
+canvas {
+	border: 0px solid black;
+	background-repeat: no-repeat;
+}
+
+#canvascolor input {
+	height: 50px;
+	width: 50px;
+}
+</style>
+	<input type="file" id="file_1">
+	<div id = "addFurFileDiv" style="display:none;"><input type="file" id="file_2"></div>
+	<button id='addButton' target="_blank" onClick='addOnclick();'>Add</button>
+	<canvas id="canvas" width="700" height="451"></canvas>
+	<section id="canvascolor">
+		<input class="canvasborder" type="image"
+			src="../images/wallpapers/wall_1.jpg"> <input
+			class="canvasborder" type="image"
+			src="../images/wallpapers/wall_2.jpg">
+	</section>
+	<button href='' id='txt' target="_blank">submit</button>
+	<br />
+	<img id="preview" />
+	<script>
+		var canvas = new fabric.Canvas('canvas');
+		$("#canvascolor > input").click(function() {
+			var img = $(this).attr('src');
+			$('#canvas').css("background-image", "url(" + img + ")");
+		});
+		document.getElementById('file_1').addEventListener("change", function(e) {
+			var file = e.target.files[0];
+			var reader = new FileReader();
+			reader.onload = function(f) {
+				var data = f.target.result;
+				fabric.Image.fromURL(data, function(img) {
+					var oImg = img.set({
+						left : 70,
+						top : 100,
+						width : 350,
+						height : 300,
+						angle : 0
+					}).scale(0.9);
+					canvas.add(oImg).renderAll();
+					var a = canvas.setActiveObject(oImg);
+					var dataURL = canvas.toDataURL({
+						format : 'png',
+						quality : 0.8
+					});
+				});
+			};
+			reader.readAsDataURL(file);
+		});
+		
+		function addOnclick (){
+			document.getElementById('addFurFileDiv').style.display = "block";
+		};
+		
+		document.getElementById('file_2').addEventListener("change", function(e) {
+			var file = e.target.files[0];
+			var reader = new FileReader();
+			reader.onload = function(f) {
+				var data = f.target.result;
+				fabric.Image.fromURL(data, function(img) {
+					var oImg = img.set({
+						left : 70,
+						top : 100,
+						width : 350,
+						height : 300,
+						angle : 0
+					}).scale(0.9);
+					canvas.add(oImg).renderAll();
+					var a = canvas.setActiveObject(oImg);
+					var dataURL = canvas.toDataURL({
+						format : 'png',
+						quality : 0.8
+					});
+				});
+			};
+			reader.readAsDataURL(file);
+		});
+		
+		document.querySelector('#txt').onclick = function(e) {
+			e.preventDefault();
+			canvas.deactivateAll().renderAll();
+			document.querySelector('#preview').src = canvas.toDataURL();
+		};
+	</script>
+</body>
+</html>

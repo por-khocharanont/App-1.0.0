@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" type="text/css"	href="http://40cda0774e261aa41640-b6c0e455536dee98a36847a6126a7138.r96.cf2.rackcdn.com/hcc_017.css">
+<link rel="stylesheet" type="text/css"	href="http://c453312.r12.cf2.rackcdn.com/combo_001.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Get Colors from Image</title>
+<meta name="description"
+	mcontent="Get HTML colors from any image with this simple online tool.">
+<meta name="keywords" content="Color, imahe, picture, upload, html5">
+<!-- <link rel="shortcut icon" -->
+<!-- 	href="http://c632769.r69.cf2.rackcdn.com/favicon.ico" -->
+<!-- 	type="image/x-icon"> -->
+<!-- <script -->
+<!-- 	src="https://apis.google.com/_/scs/apps-static/_/js/k=oz.gapi.th.YiPTE8QESOM.O/m=auth/exm=plusone/rt=j/sv=1/d=1/ed=1/am=AQ/rs=AGLTcCNVAtAD2yKbgfHPDEhoP2K1I124aQ/cb=gapi.loaded_1" -->
+<!-- 	async=""></script> -->
+<!-- <script -->
+<!-- 	src="https://apis.google.com/_/scs/apps-static/_/js/k=oz.gapi.th.YiPTE8QESOM.O/m=plusone/rt=j/sv=1/d=1/ed=1/am=AQ/rs=AGLTcCNVAtAD2yKbgfHPDEhoP2K1I124aQ/cb=gapi.loaded_0" -->
+<!-- 	async=""></script> -->
+<!-- <script -->
+<!-- 	src="https://pagead2.googlesyndication.com/pub-config/r20160913/ca-pub-6483924506584584.js"></script> -->
+<!-- <script type="text/javascript" async="" -->
+<!-- 	src="https://apis.google.com/js/plusone.js" gapi_processed="true"></script> -->
+<!-- <script async="" src="//www.google-analytics.com/analytics.js"></script> -->
+<!-- <script> -->
+
+<!-- </script> -->
+<!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
+<script type="text/javascript">
+	//     window.cookieconsent_options = {"message":"This website uses cookies to ensure you get the best experience on our website","dismiss":"Got it!","learnMore":"More info","link":"http://html-color-codes.info/cookiepolicy/","theme":"light-bottom"};
+</script>
+
+<!-- <script type="text/javascript" -->
+<!-- 	src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script> -->
+<!-- End Cookie Consent plugin -->
+
+<script type="text/javascript">
+	var ev = 0;
+	var cnvHeight;
+	var cnvWidth;
+	var mousePos;
+	var c;
+	var ctx;
+	var cPix;
+	var ctxPix;
+	var img;
+	var imgHeight;
+	var imgWidth;
+
+			oFReader = new FileReader(),
+			rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+
+	oFReader.onload = function(oFREvent) {
+		document.getElementById("slika").src = oFREvent.target.result;
+	};
+
+	function loadImageFile() {
+		if (document.getElementById("uploadImage").files.length === 0) {
+			return;
+		}
+		var oFile = document.getElementById("uploadImage").files[0];
+		if (!rFilter.test(oFile.type)) {
+			alert("You must select a valid image file!");
+			return;
+		}
+		oFReader.readAsDataURL(oFile);
+
+	}
+
+	var onclickListener = function(evt) {
+		imageData = ctxPix.getImageData(0, 0, 150, 150);
+		var pixels = imageData.data;
+		var barva = '#' + d2h(imageData.data[45300 + 0])
+				+ d2h(imageData.data[45300 + 1])
+				+ d2h(imageData.data[45300 + 2]);
+		document.getElementById("pixcolor").value = barva;
+		document.getElementById("pixr").value = pixels[0];
+		document.getElementById("pixg").value = pixels[1];
+		document.getElementById("pixb").value = pixels[2];
+		document.getElementById("pixcolor").select();
+		document.getElementById("barvadiv").style.backgroundColor = barva;
+		istat = !istat;
+	};
+
+	function myFunction() {
+		istat = true;
+		cnvWidth = 470;
+		cnvHeight = 300;
+
+		c = document.getElementById("myCanvas");
+		ctx = c.getContext("2d");
+
+		cPix = document.getElementById("pixCanvas");
+		ctxPix = cPix.getContext("2d");
+
+		ctxPix.mozImageSmoothingEnabled = false;
+		ctxPix.webkitImageSmoothingEnabled = false;
+
+		img = document.getElementById("slika");
+		imgHeight = img.height;
+		imgWidth = img.width;
+
+		if (imgHeight < cnvHeight && imgWidth < cnvWidth) {
+			ctx.mozImageSmoothingEnabled = false;
+			ctx.webkitImageSmoothingEnabled = false;
+		}
+
+		if ((imgWidth / imgHeight) < 1.56667) {
+			cnvWidth = imgWidth / imgHeight * cnvHeight;
+		} else {
+			cnvHeight = cnvWidth / (imgWidth / imgHeight);
+		}
+		ctx.clearRect(0, 0, c.width, c.height);
+		ctx.drawImage(img, 0, 0, cnvWidth, cnvHeight);
+
+		var onmoveListener = function(evt) {
+			ev = 1;
+			if (istat) {
+				mousePos = getMousePos(c, evt);
+				drawPix(cPix, ctxPix, img, Math.round(mousePos.x
+						* (imgWidth / cnvWidth)), Math.round(mousePos.y
+						* (imgHeight / cnvHeight)));
+			}
+		};
+		c.addEventListener('mousemove', onmoveListener, false);
+		c.addEventListener('mousedown', onclickListener, false);
+
+		var onMiniclickListener = function(evt) {
+			mousePos = getMousePos(cPix, evt);
+			imageData = ctxPix.getImageData(0, 0, 150, 150);
+			imageData2 = ctxPix.getImageData(mousePos.x, mousePos.y, 150, 150)
+			var mpixels = imageData2.data;
+			// 		console.log("r"+pixels[0]);
+			// 		console.log("g"+pixels[1]);
+			// 		console.log("b"+pixels[2]);
+			var loc = Math.round(mousePos.y) * 600 + Math.round(mousePos.x) * 4;
+			var barva = '#' + d2h(imageData.data[loc + 0])
+					+ d2h(imageData.data[loc + 1])
+					+ d2h(imageData.data[loc + 2]);
+			document.getElementById("pixcolor").value = barva;
+			document.getElementById("pixr").value = mpixels[0];
+			document.getElementById("pixg").value = mpixels[1];
+			document.getElementById("pixb").value = mpixels[2];
+			document.getElementById("pixcolor").select();
+			document.getElementById("barvadiv").style.backgroundColor = barva;
+		};
+		cPix.addEventListener('mousedown', onMiniclickListener, false);
+
+	}
+	function drawPix(cPix, ctxPix, img, x, y) {
+		ctxPix.clearRect(0, 0, cPix.width, cPix.height);
+		if (x < 5)
+			x = 5;
+		if (y < 5)
+			y = 5;
+		if (x > imgWidth - 4)
+			x = imgWidth - 4;
+		if (y > imgHeight - 4)
+			y = imgHeight - 4;
+		ctxPix
+				.drawImage(img, x - 5, y - 5, 9, 9, 0, 0, cPix.width,
+						cPix.height);
+	}
+	function getMousePos(canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		return {
+			x : evt.clientX - rect.left,
+			y : evt.clientY - rect.top
+		};
+	}
+	function d2h(d) {
+		return ("0" + d.toString(16)).slice(-2).toUpperCase();
+	}
+	function greenbox(c, x, y) {
+		c.beginPath();
+		c.rect(x - 5, y - 5, 9, 9);
+		c.lineWidth = 1;
+		c.strokeStyle = '#00FF00';
+		c.stroke();
+	}
+</script>
+<link rel="stylesheet" type="text/css"
+	href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/light-bottom.css">
+</head>
+<body>
+	<div id="colorcodes">
+		<div id="colorcodes">
+			<div id="main">
+				<h1>Get Colors from Image (BETA)</h1>
+				<p>
+					With the magic of HTML5 you can get colors from any image with this
+					simple online tool. To use this new color tool it's recomended that
+					you upgrade your web browser to the latest version.<br>(For
+					the full HTML5 support).
+				</p>
+				<p>
+					<b>Step 1:</b> Select image from your computer and click "Show
+					image" button. Scaled version of the image will show up.
+				</p>
+				<p>
+					<b>Step 2:</b> Click anywhere on the image to choose an area. 9x9
+					pixels will be magnified in a small box.
+				</p>
+				<p>
+					<b>Step 3:</b> Click anywhere in the small box to select desired
+					color.
+				</p>
+				<p>
+					<b>Step 4:</b> Click again on the image to choose another 9x9
+					pixels area.
+				</p>
+				<br>
+				<div id="insertcolor" style="width: 612px;">
+					<input style="float: left;" id="uploadImage" name="myPhoto"
+						onchange="loadImageFile();" type="file">
+					<button onclick="myFunction()">Show image</button>
+				</div>
+				<div
+					style="width: 622px; height: 302px; position: relative; background-color: #EEE;">
+					<canvas id="myCanvas" width="470" height="300"
+						style="border: 1px solid #d3d3d3; position: absolute; left: 0; top: 0; z-index: 0;">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="pixCanvas" width="150" height="150"
+						style="border: 1px solid #d3d3d3; position: absolute; left: 470px; top: 0; z-index: 0;">Your browser does not support the HTML5 canvas tag.</canvas>
+					<div id="barvadiv"
+						style="border: 25px solid rgb(211, 211, 211); height: 100px; width: 102px; background-color: rgb(153, 149, 146); position: absolute; left: 470px; top: 152px; z-index: 0;"></div>
+				</div>
+				<div id="insertcolor" style="width: 612px; font-size: 14px;">
+					Color Code: <input maxlength="7" id="pixcolor" name="pixcolor"
+						style="font-size: 20px; width: 100px;" type="text">
+				</div>
+				<div id="insertcolor" style="width: 612px; font-size: 14px;">
+					RGB: <input maxlength="7" id="pixr" name="pixr"
+						style="font-size: 20px; width: 35px;" type="text"> <input
+						maxlength="7" id="pixg" name="pixg"
+						style="font-size: 20px; width: 35px;" type="text"> <input
+						maxlength="7" id="pixb" name="pixb"
+						style="font-size: 20px; width: 35px;" type="text">
+				</div>
+				<br> <br> <img id="slika"
+					src="data:image/jpeg;base64,"
+					alt="Image preview" style="display: none">
+			</div>
+
+
+		</div>
+
+		<!-- 		<div class="copy">COPYRIGHT 2011. ALL RIGHTS ARE RESERVED.</div> -->
+		<script type="text/javascript">
+			
+		</script>
+
+	</div>
+</body>
+</html>
