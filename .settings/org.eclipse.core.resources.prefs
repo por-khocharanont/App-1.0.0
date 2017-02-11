@@ -1,2 +1,4 @@
 eclipse.preferences.version=1
-encoding//WebContent/supplier/paintApp.html=UTF-8
+encoding//WebContent/seller/paintApp.html=UTF-8
+encoding/<project>=UTF-8
+separateDerivedEncodings=true
